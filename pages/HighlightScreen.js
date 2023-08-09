@@ -106,66 +106,84 @@
 // });
 
 // export default HighlightScreen;
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase-config'; // Assuming you have the Firestore config imported
+
+const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { db } from '../firebase-config'; // Import your Firebase config
+const HighlightScreen = () => {
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [selectedTime, setSelectedTime] = useState('');
+  const [scheduleSaved, setScheduleSaved] = useState(false);
 
-const HighlightScreen = ({ route }) => {
-  const { book } = route.params;
-  const [bookDetails, setBookDetails] = useState(null);
+  const toggleDay = (day) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter(d => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
 
-  useEffect(() => {
-    // Fetch book details from Firestore based on the given bookId
-    const fetchBookDetails = async () => {
-      try {
-        const docRef = await db.collection('books').doc(bookId).get();
-        if (docRef.exists) {
-          setBookDetails(docRef.data());
-        }
-      } catch (error) {
-        console.error('Error fetching book details: ', error);
-      }
-    };
+  const handleSaveSchedule = async () => {
+    if (selectedDays.length === 0 || !selectedTime) {
+      // Handle error, show a message or alert
+      return;
+    }
 
-    fetchBookDetails();
-  }, [bookId]);
-
-  if (!bookDetails) {
-    return null; // You can render a loading indicator here
-  }
+    try {
+      await addDoc(collection(db, 'schedules'), {
+        days: selectedDays,
+        time: selectedTime,
+      });
+      setScheduleSaved(true);
+    } catch (error) {
+      console.error('Error adding schedule: ', error);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Book Name: {book.Bookname}</Text>
-      <Text style={styles.text}>Author: {book.Authorname}</Text>
-      <Text style={styles.text}>Pages: {book.Pages}</Text>
-      {book.ImageUrl && (
-        <Image source={{ uri: book.ImageUrl }} style={styles.image} />
+    <View>
+      <Text>Select Days:</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        {daysOfWeek.map(day => (
+          <TouchableOpacity
+            key={day}
+            onPress={() => toggleDay(day)}
+            style={{
+              backgroundColor: selectedDays.includes(day) ? 'green' : 'lightgray',
+              padding: 10,
+              borderRadius: 5,
+            }}
+          >
+            <Text>{day}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <Text>Select Time:</Text>
+      <TextInput
+        value={selectedTime}
+        onChangeText={text => setSelectedTime(text)}
+        placeholder="Select time"
+      />
+
+      <TouchableOpacity onPress={handleSaveSchedule}>
+        <Text>Save Schedule</Text>
+      </TouchableOpacity>
+
+      {scheduleSaved && (
+        <View>
+          <Text>Schedule Saved!</Text>
+          <Text>Selected Days: {selectedDays.join(', ')}</Text>
+          <Text>Selected Time: {selectedTime}</Text>
+        </View>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  text: {
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  image: {
-    width: 130,
-    height: 170,
-    borderRadius: 15,
-    marginTop: 10,
-  },
-});
-
 export default HighlightScreen
 
 

@@ -24,7 +24,7 @@ const AddNewForm = ({ navigation }) => {
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [capturedImage, setCapturedImage] = useState(null);
   //for storing image
- 
+
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 
@@ -45,29 +45,29 @@ const AddNewForm = ({ navigation }) => {
   //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
   //       allowsEditing: true,
   //     });
-      // if (assets.length > 0) {
-      //   try {
-      //     const { localUri: uri } = assets[0];
-      //     const response = await RNFetchBlob.fetch('PUT', uri, {
-      //       'Content-Type': 'application/octet-stream',
-      //     });
-      //     if (response.info().status === 200) {
-      //       const blob = response.blob();
-      //       const imageName = uri.substring(uri.lastIndexOf('/') + 1);
-      //       const storageRef = ref(storage, `images/${imageName}`);
-      //       await put(storageRef, blob);
-      //       const downloadURL = await getDownloadURL(storageRef);
-      //       setImageUri(downloadURL);
-      //     } else {
-      //       console.error('Failed to upload image:', response.text());
-      //     }
-      //   } catch (error) {
-      //     console.error('Error uploading image:', error);
-      //   }
-      // }
+  // if (assets.length > 0) {
+  //   try {
+  //     const { localUri: uri } = assets[0];
+  //     const response = await RNFetchBlob.fetch('PUT', uri, {
+  //       'Content-Type': 'application/octet-stream',
+  //     });
+  //     if (response.info().status === 200) {
+  //       const blob = response.blob();
+  //       const imageName = uri.substring(uri.lastIndexOf('/') + 1);
+  //       const storageRef = ref(storage, `images/${imageName}`);
+  //       await put(storageRef, blob);
+  //       const downloadURL = await getDownloadURL(storageRef);
+  //       setImageUri(downloadURL);
+  //     } else {
+  //       console.error('Failed to upload image:', response.text());
+  //     }
+  //   } catch (error) {
+  //     console.error('Error uploading image:', error);
+  //   }
+  // }
   //   }
   // };
-  
+
   // const handleGallerySelect = async () => {
   //   setModalVisible(false);
   //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -77,7 +77,7 @@ const AddNewForm = ({ navigation }) => {
   //       allowsEditing: true,
   //       quality: 1,
   //     });
-  
+
   //     if (assets.length > 0) {
   //       try {
   //         const { localUri: uri } = assets[0];
@@ -107,58 +107,58 @@ const AddNewForm = ({ navigation }) => {
       aspect: [3, 4],
       quality: 1,
     });
-   
+
     if (!result.canceled) {
-        const uploadURL = await uploadImage(result.assets[0].uri);
-        setImage(uploadURL)
-      setInterval(()=>{
+      const uploadURL = await uploadImage(result.assets[0].uri);
+      setImage(uploadURL)
+      setInterval(() => {
         setUploading(false);
-      },2000);
-      } else {
-        setImage(null);
-        setInterval(()=>{
-          setUploading(false);
-        },2000)
+      }, 2000);
+    } else {
+      setImage(null);
+      setInterval(() => {
+        setUploading(false);
+      }, 2000)
     }
   }
-  
-    const uploadImage = async (uri) => {
-      const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          resolve(xhr.response);
-        };
-        xhr.onerror = function (e) {
-          console.log(e);
-          reject(new TypeError("Network request failed"));
-        };
-        xhr.responseType = "blob";
-        xhr.open("GET", uri, true);
-        xhr.send(null);
-      });
-  
-      try {
-        const storageRef = ref(storage, `Images/image-${Date.now()}`);
-        const result = await uploadBytes(storageRef, blob);
-        blob.close();
-        return await getDownloadURL(storageRef);
-      } catch (error) {
-        alert(`Error: ${error}`);
-      }
-    };
+
+  const uploadImage = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    try {
+      const storageRef = ref(storage, `Images/image-${Date.now()}`);
+      const result = await uploadBytes(storageRef, blob);
+      blob.close();
+      return await getDownloadURL(storageRef);
+    } catch (error) {
+      alert(`Error: ${error}`);
+    }
+  };
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
 
-  const clearForm = () => {
-    setBookname("");
-    setAuthorname("");
-    setPages("");
-    setImage(""); // Clear the image URL when clearing the form
-  };
-  
+  // const clearForm = () => {
+  //   setBookname("");
+  //   setAuthorname("");
+  //   setPages("");
+  //   setImage(""); // Clear the image URL when clearing the form
+  // };
+
 
   const StartReading = async () => {
     try {
@@ -172,11 +172,22 @@ const AddNewForm = ({ navigation }) => {
           userId: user.email,
         });
         console.log('Book details added to Firestore successfully');
-        navigation.navigate("Reminder");
-        clearForm(); // Clear the input fields after successful addition
+
+        // Pass the book details as route parameters
+        navigation.navigate("Reminder", {
+          bookDocId: docRef.id,
+          bookname: bookname,
+          authorname: authorname,
+          pages: pages,
+          image: image,
+          selectedDays: [], // Pass the selected days array here
+          selectedTime: '', // Pass the selected time here
+        });
+        // clearForm(); // Clear the input fields after successful addition
       }
     } catch (error) {
       console.error('Error adding document: ', error);
+
     }
   };
 
@@ -212,7 +223,7 @@ const AddNewForm = ({ navigation }) => {
                 marginBottom: 20
               }}>
               {image ? (<Image source={{ uri: image }} style={{ width: 130, height: 170, borderRadius: 15 }} />
-              
+
               ) : (
                 <Text
                   style={{
@@ -228,7 +239,7 @@ const AddNewForm = ({ navigation }) => {
                     color="black" />
 
                 </Text>
-                )}
+              )}
 
             </TouchableOpacity>
             <Modal

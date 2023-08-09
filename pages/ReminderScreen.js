@@ -1,17 +1,24 @@
 import { Button, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native';
+
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { auth, db, storage } from '../firebase-config';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, arrayUnion,serverTimestamp } from 'firebase/firestore';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
 
 const ReminderScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { bookDocId, bookname, authorname, pages, image } = route.params;
+
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null); // New state for selected date
+  const [selectedDays, setSelectedDays] = useState([]); // New state for selected days
   const [buttonColorm, setbuttonColorm] = useState("#7CB9E8")
   const [buttonColort, setbuttonColort] = useState("#7CB9E8")
   const [buttonColorw, setbuttonColorw] = useState("#7CB9E8")
@@ -54,6 +61,13 @@ const ReminderScreen = () => {
   const handlebuttonpresssu = () => {
     setbuttonColorsu(buttonColorsu === "#7CB9E8" ? '#00A36C' : "#7CB9E8")
   };
+  const handleDayToggle = (day) => {
+    setSelectedDays((prevDays) =>
+      prevDays.includes(day)
+        ? prevDays.filter((d) => d !== day)
+        : [...prevDays, day]
+    );
+  };
 
   const handleGoback=()=>{
     navigation.goBack();
@@ -62,32 +76,19 @@ const ReminderScreen = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        const selectedDays = [];
-       
-        if (buttonColorm === '#00A36C') selectedDays.push('Monday');
-        if (buttonColort === '#00A36C') selectedDays.push('Tuesday');
-        if (buttonColorw === '#00A36C') selectedDays.push('Wednesday');
-        if (buttonColorth === '#00A36C') selectedDays.push('Thursday');
-        if (buttonColorf === '#00A36C') selectedDays.push('Friday');
-        if (buttonColorsa === '#00A36C') selectedDays.push('Saturday');
-        if (buttonColorsu === '#00A36C') selectedDays.push('Sunday');
-        // ... (similarly for other days)
+        // Create a reference to the 'reminders' collection
+        const remindersCollectionRef = collection(db, 'reminders');
   
-        const reminderData = {
+        // Create a new reminder document in the 'reminders' collection
+        const reminderDocRef = await addDoc(remindersCollectionRef, {
+          userId: user.uid,
+          bookDocId: bookDocId,
           days: selectedDays,
           time: selectedTime,
-        };
-  
-        // Get the reference to the user's document
-        const userDocRef = doc(db, 'users', user.uid); // Ensure 'user.uid' is the correct user ID
-  
-        // Update the document with the reminder data
-        await updateDoc(userDocRef, {
-          reminders: arrayUnion(reminderData),
+          createdAt: serverTimestamp(),
         });
   
         console.log('Reminder details added to Firestore successfully');
-        // Navigate to the next screen after successfully saving the reminder
         navigation.navigate("Timeandpage");
       }
     } catch (error) {
@@ -97,7 +98,7 @@ const ReminderScreen = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#D7DBDD", flex: 1 }}>
-      <ScrollView>
+      
  <Pressable onPress={handleGoback}>
             <AntDesign name="arrowleft" size={24} color="black" style={{marginTop:10,marginLeft:20}}/>
             </Pressable>
@@ -119,10 +120,10 @@ const ReminderScreen = () => {
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
 
-        <Text onPress={handlebuttonpressm} style={[styles.button1, { backgroundColor: buttonColorm }]}>M</Text>
-        <Text onPress={handlebuttonpresst} style={[styles.button1, { backgroundColor: buttonColort }]}>T</Text>
-        <Text onPress={handlebuttonpressw} style={[styles.button1, { backgroundColor: buttonColorw }]}>W</Text>
-        <Text onPress={handlebuttonpressth} style={[styles.button1, { backgroundColor: buttonColorth }]}>TH</Text>
+        <Text onPress={handlebuttonpressm} style={[styles.button1, { backgroundColor: buttonColorm }]}>Mon</Text>
+        <Text onPress={handlebuttonpresst} style={[styles.button1, { backgroundColor: buttonColort }]}>Tue</Text>
+        <Text onPress={handlebuttonpressw} style={[styles.button1, { backgroundColor: buttonColorw }]}>Wed</Text>
+        <Text onPress={handlebuttonpressth} style={[styles.button1, { backgroundColor: buttonColorth }]}>Thu</Text>
 
       </View>
 
@@ -142,12 +143,12 @@ const ReminderScreen = () => {
             borderWidth: 1,
             padding: 10,
             fontSize: 20,
-            width: 50,   
+            width: 70,   
             color: "white",
             borderRadius: 10,
-            marginLeft: 70,
+            marginLeft: 50,
             borderColor: "transparent"},
-            {backgroundColor: buttonColorf}]}>F</Text>
+            {backgroundColor: buttonColorf}]}>Fri</Text>
         <Text
           onPress={handlebuttonpresssa}
           style={[{
@@ -155,13 +156,13 @@ const ReminderScreen = () => {
             borderWidth: 1,
             padding: 10,
             fontSize: 20,
-            width: 50,
+            width: 70,
             backgroundColor: "#7CB9E8",
             color: "white",
             borderRadius: 10,
             borderColor: "transparent",
             borderColor: "transparent"},
-            {backgroundColor: buttonColorsa}]}>SA</Text>
+            {backgroundColor: buttonColorsa}]}>Sat</Text>
        
         <Text
           onPress={handlebuttonpresssu}
@@ -170,13 +171,13 @@ const ReminderScreen = () => {
             borderWidth: 1,
             padding: 10,
             fontSize: 20,
-            width: 50,
+            width: 70,
             backgroundColor: "#7CB9E8",
             color: "white",
             borderRadius: 10,
-            marginRight: 70,
+            marginRight: 50,
             borderColor: "transparent"},
-            {backgroundColor: buttonColorsu}]}>S</Text>
+            {backgroundColor: buttonColorsu}]}>Sun</Text>
 
 
       </View>
@@ -211,7 +212,7 @@ const ReminderScreen = () => {
 
 
       <Pressable
-        onPress={() => navigation.navigate("Timeandpage")}
+        onPress={handleSaveReminder}
         style={{ marginLeft: "auto", marginRight: "auto", padding: 15, marginTop: 50 }}>
         <Text
           style={{
@@ -227,31 +228,7 @@ const ReminderScreen = () => {
             justifyContent: "center"
           }}>Next</Text>
       </Pressable>
-      <Pressable
-      onPress={handleSaveReminder}
-      style={{
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: 15,
-        marginTop: 50,
-      }}>
-      <Text
-        style={{
-          fontSize: 20,
-          backgroundColor: '#00308F',
-          color: 'white',
-          borderWidth: 2,
-          padding: 15,
-          borderRadius: 30,
-          borderColor: 'transparent',
-          width: 120,
-          textAlign: 'center',
-          justifyContent: 'center',
-        }}>
-        Save Reminder
-      </Text>
-    </Pressable>
-    </ScrollView>
+  
     </SafeAreaView>
   )
 }
@@ -261,12 +238,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     fontSize: 20,
-    width: 50,
-    // backgroundColor: "#7CB9E8",
+    width: 70,
     color: "white",
     borderRadius: 10,
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 10,
+    marginRight: 10,
     borderColor: "transparent"
   }
 })

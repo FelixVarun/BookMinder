@@ -4,7 +4,7 @@ import HighlightScreen from "./pages/HighlightScreen";
 import SettingScreen from "./pages/SettingScreen";
 import HomeScreen from "./pages/HomeScreen";
 import ActivityScreen from "./pages/ActivityScreen";
-
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -24,19 +24,42 @@ import { auth } from "./firebase-config";
 const Navigation = () => {
     const Stack = createNativeStackNavigator();
     const Tab = createBottomTabNavigator();
+
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-            setUser(authUser);
-            if (initializing) {
-                setInitializing(false);
-            }
-        });
+    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      setUser(authUser);
+      if (authUser) {
+        // Store user's authentication token or identifier in AsyncStorage
+        AsyncStorage.setItem("userToken", authUser.uid);
+      } else {
+        // Remove user's authentication token from AsyncStorage
+        AsyncStorage.removeItem("userToken");
+      }
+      if (initializing) {
+        setInitializing(false);
+      }
+    });
 
-        return unsubscribe;
-    }, []);
+    // Check for user token in AsyncStorage and set user state
+    const checkUserToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem("userToken");
+        if (token) {
+          setUser({ uid: token });
+        }
+        setInitializing(false);
+      } catch (error) {
+        console.error("Error checking user token:", error);
+        setInitializing(false);
+      }
+    };
+    checkUserToken();
+
+    return unsubscribe;
+  }, []);
 
     if (initializing) {
         // You can render a loading screen here if needed
@@ -114,7 +137,7 @@ return(
     return (
 
         <NavigationContainer>
-            {/* <DetailsProvider> */}
+          
                 <Stack.Navigator>
 
                 {user ? (
