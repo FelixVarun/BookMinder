@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "BOOKMINDER",
+    "slug": "BookMinder",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff",
+        "permissions": ["NOTIFICATIONS"]
+      },
+      "package": "com.felixvarun.BookMinder"
+      
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "owner": "felixvarun",
+    "extra": {
+      "eas": {
+        "projectId": "59f3d03e-b560-418e-b4e1-89a3e07f9052"
+      }
+    }
+  }
+}
