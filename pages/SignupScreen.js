@@ -3,9 +3,14 @@ import { Alert, Button, KeyboardAvoidingView, Pressable, Text, TextInput, View }
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context'
+<<<<<<< HEAD
 import { auth, db} from '../firebase-config';
 import { useNavigation } from '@react-navigation/native';
 import { doc, setDoc } from 'firebase/firestore';
+=======
+import { auth ,db,doc, setDoc} from '../firebase-config';
+import { useNavigation } from '@react-navigation/native';
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
 
 
@@ -14,6 +19,7 @@ const SignupScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
+<<<<<<< HEAD
     const [name, setName] = useState('');
 
     const navigation = useNavigation();
@@ -74,6 +80,37 @@ const SignupScreen = () => {
         }
     }
     
+=======
+    const navigation = useNavigation();
+
+    const SignupUser = () => {
+        if(email === "" || password === "" || phone === ""){
+          Alert.alert(
+            "Invalid Details",
+            "Please fill all the details",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: false }
+          );
+        }
+        createUserWithEmailAndPassword(auth,email,password).then((userCredential) => {
+          console.log("user credential",userCredential);
+          const user = userCredential._tokenResponse.email;
+          const myUserUid = auth.currentUser.uid;
+  
+          setDoc(doc(db,"users",`${myUserUid}`),{
+            email:user,
+            phone:phone
+          })
+        })
+      }
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
     
     return (
         <SafeAreaView
@@ -103,6 +140,7 @@ const SignupScreen = () => {
                 </View>
 
                 <View style={{ marginTop: 50 }}>
+<<<<<<< HEAD
                 <View>
     <Text style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>
         Name
@@ -122,6 +160,8 @@ const SignupScreen = () => {
         }}
     />
 </View>
+=======
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
                     <View>
                         <Text style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>
                             Email
@@ -209,3 +249,7 @@ const SignupScreen = () => {
 }
 
 export default SignupScreen
+<<<<<<< HEAD
+=======
+
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e

@@ -18,6 +18,7 @@
       "supportsTablet": true
     },
     "android": {
+<<<<<<< HEAD
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -26,15 +27,31 @@
       },
       "package": "com.felixvarun.BookMinder"
       
+=======
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.felixvarun.BookMinder"
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+<<<<<<< HEAD
     "owner": "felixvarun",
     "extra": {
       "eas": {
         "projectId": "59f3d03e-b560-418e-b4e1-89a3e07f9052"
       }
     }
+=======
+    "extra": {
+      "eas": {
+        "projectId": "6f361ffa-0884-4ce9-a838-05346a7423ea"
+      }
+    },
+    "owner": "felixvarun"
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   }
 }

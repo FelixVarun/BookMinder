@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, ScrollView, FlatList } from 'react-native'
 import React, { useLayoutEffect, useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,10 +7,22 @@ import { Ionicons } from '@expo/vector-icons';
 import ReadingCardList from '../components/ReadingCardlist';
 import { auth, db } from '../firebase-config';
 import { doc, getDoc } from 'firebase/firestore';
+=======
+import { StyleSheet, Text, View, Pressable,TouchableOpacity,ScrollView,FlatList} from 'react-native'
+import React, { useLayoutEffect,useState,useEffect } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';    
+import ReadingCard from '../components/ReadingCard';
+import {db,auth} from '../firebase-config'; // Check the import statement here
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import ReadingCardList from '../components/ReadingCardlist';
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+<<<<<<< HEAD
   const [greet, setGreet] = useState('');
   const user = auth.currentUser;
   const [userName, setUserName] = useState('');
@@ -57,6 +70,47 @@ const findGreetings = () => {
 
 
 
+=======
+ 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: "Home",
+      headerTitleStyle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "black",
+      },
+
+      headerStyle: {
+        backgroundColor: "#DBF3FA",
+        height: 110,
+        borderBottomColor: "transparent",
+        shadowColor: "transparent",
+
+      },
+      headerLeft: () => (
+        <Ionicons
+          name="notifications-sharp"
+          size={24}
+          color="black"
+          style={{ marginLeft: 15 }}
+        />
+      ),
+      headerRight: () => (
+        <Ionicons
+          name="search-sharp"
+          size={24}
+          color="black"
+          style={{ marginRight: 15 }}
+        />
+      ),
+
+    })
+
+  }, [])
+  
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   const handleAddNewClick = () => {
     navigation.navigate('AddNew');
   };
@@ -66,6 +120,7 @@ const findGreetings = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#DBF3FA', flex: 1 }}>
+<<<<<<< HEAD
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 20,marginHorizontal:20}}>
         <View style={{ flexDirection: "row"}}>
               <Text style={{ fontSize: 17, fontWeight: "bold",color:"#3494E6" }}>{`Good ${greet}`}</Text>
@@ -77,19 +132,30 @@ const findGreetings = () => {
       </View>
 
       <ReadingCardList onCardPress={handleCardPress} />
+=======
+      <ReadingCardList onCardPress={handleCardPress}/>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
       <TouchableOpacity
         onPress={handleAddNewClick}
         style={styles.addButton}
       >
         <Text style={styles.addButtonLabel}>Add New Book</Text>
       </TouchableOpacity>
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   addButton: {
     position: 'absolute',
     bottom: 20,

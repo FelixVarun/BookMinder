@@ -164,6 +164,7 @@ const AddNewForm = ({ navigation }) => {
     try {
       const user = auth.currentUser;
       if (user) {
+<<<<<<< HEAD
         // const docRef = await addDoc(collection(db, 'books'), {
         //   Authorname: authorname,
         //   Bookname: bookname,
@@ -176,6 +177,20 @@ const AddNewForm = ({ navigation }) => {
         // Pass the book details as route parameters
         navigation.navigate("Timeandpage", {
           // bookDocId: docRef.id,
+=======
+        const docRef = await addDoc(collection(db, 'books'), {
+          Authorname: authorname,
+          Bookname: bookname,
+          Pages: pages,
+          ImageUrl: image, // Include the image URL in the Firestore document
+          userId: user.email,
+        });
+        console.log('Book details added to Firestore successfully');
+
+        // Pass the book details as route parameters
+        navigation.navigate("Reminder", {
+          bookDocId: docRef.id,
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
           bookname: bookname,
           authorname: authorname,
           pages: pages,
@@ -198,7 +213,11 @@ const AddNewForm = ({ navigation }) => {
 
 
   return (
+<<<<<<< HEAD
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={{ flex: 1 }}>
+=======
+    <LinearGradient colors={["#bdc3c7", "#2c3e50"]} style={{ flex: 1 }}>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
       <SafeAreaView>
         <ScrollView>
@@ -344,11 +363,19 @@ const AddNewForm = ({ navigation }) => {
                   top: 30,
                   width: 150,
                   textAlign: "center",
+<<<<<<< HEAD
                   backgroundColor: "#7D3C98",
                   color: "white",
                   borderColor: "transparent"
                 }}
               >Next</Text> 
+=======
+                  backgroundColor: "#8ca6db",
+                  color: "white",
+                  borderColor: "transparent"
+                }}
+              >Next</Text>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
             </Pressable>
           </View>

@@ -1,17 +1,31 @@
+<<<<<<< HEAD
 import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, Image, Pressable, FlatList, ScrollView, Button } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+=======
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput,Image, Pressable,FlatList} from 'react-native'
+import React, { useState,useEffect } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Ionicons } from '@expo/vector-icons';
+
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 import SwitchSelector from 'react-native-switch-selector';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Camera } from 'expo-camera';
+<<<<<<< HEAD
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const DetailsUpdatingScreen = ({ route }) => {
 
+=======
+
+const DetailsUpdatingScreen = ({ route }) => {
+  
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   const [selectedValue, setSelectedValue] = useState('option1');
   const [isModalVisible, setModalVisible] = useState(false);
   const [notesList, setNotesList] = useState([]);
@@ -23,9 +37,12 @@ const DetailsUpdatingScreen = ({ route }) => {
   const [showCamera, setShowCamera] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
   const [capturedPhotos, setCapturedPhotos] = useState([]);
+<<<<<<< HEAD
   const { book } = route.params;
   const navigation = useNavigation();
 
+=======
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
   const options = [
     { label: 'Notes', value: 'option1' },
@@ -36,7 +53,11 @@ const DetailsUpdatingScreen = ({ route }) => {
   const handleChange = (value) => {
     setSelectedValue(value);
   };
+<<<<<<< HEAD
 
+=======
+  const { book } = route.params;
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   const handleSaveNotes = () => {
     if (editingIndex !== null) {
       const updatedNotesList = [...notesList];
@@ -76,6 +97,7 @@ const DetailsUpdatingScreen = ({ route }) => {
     }
   };
 
+<<<<<<< HEAD
   const NextScreen = () => {
     navigation.navigate("TimeElapsed")
 
@@ -83,6 +105,8 @@ const DetailsUpdatingScreen = ({ route }) => {
   const handleGoback = () => {
     navigation.goBack();
   }
+=======
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -118,7 +142,11 @@ const DetailsUpdatingScreen = ({ route }) => {
     if (selectedValue === 'option1') {
       return (
 
+<<<<<<< HEAD
         <ScrollView style={styles.container}>
+=======
+        <View style={styles.container}>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
           <Pressable
             style={{
@@ -169,7 +197,11 @@ const DetailsUpdatingScreen = ({ route }) => {
             </View>
           </Modal>
 
+<<<<<<< HEAD
         </ScrollView>
+=======
+        </View>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
       );
     } else {
       return (
@@ -183,6 +215,7 @@ const DetailsUpdatingScreen = ({ route }) => {
         //     }}> 
         //     <Entypo name="camera" size={45} color="black" />
         //   </Pressable>
+<<<<<<< HEAD
 
         // </View>
         <View style={{ flex: 1 }}>
@@ -232,15 +265,71 @@ const DetailsUpdatingScreen = ({ route }) => {
             </Camera>
           )}
         </View>
+=======
+          
+        // </View>
+        <View style={{ flex: 1 }}>
+        {!showCamera ? (
+          <View style={{ flex: 1, padding:16}}>
+            {!hasPermission && (
+              <Text>No camera permission. Please allow camera access.</Text>
+            )}
+            <TouchableOpacity onPress={handleCameraIconPress}
+            style={{ right: 5,bottom: 10,alignItems: "flex-end"}}>
+            
+                <Entypo name="camera" size={45} color="black" style/>
+            </TouchableOpacity>
+  
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', padding: 10 }}>
+              <FlatList
+                data={capturedPhotos}
+                renderItem={renderImageItem}
+                keyExtractor={(_, index) => index.toString()}
+                numColumns={2}
+              />
+            </View>
+          </View>
+        ) : (
+          <Camera
+            style={{ flex: 1 }}
+            type={Camera.Constants.Type.back}
+            ref={ref => setCameraRef(ref)}
+            onCameraReady={() => setHasPermission(true)}
+          >
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                bottom: 20,
+                alignSelf: 'center',
+                padding: 10,
+                backgroundColor: 'white',
+                borderRadius: 50,
+              }}
+              onPress={takePicture}
+            >
+            
+               <Entypo name="camera" size={45} color="black" 
+                style={{ width: 50, height: 50 }}
+              />
+            </TouchableOpacity>
+          </Camera>
+        )}
+      </View>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
       );
     }
   }
   return (
+<<<<<<< HEAD
     <View style={{ flex: 1,backgroundColor:"#F9F6EE" }}>
     <SafeAreaView>
     <Pressable onPress={handleGoback} style={{justifyContent:"flex-start"}}>
             <AntDesign name="arrowleft" size={24} color="black" style={{ marginTop: 10, marginLeft: 20}} />
           </Pressable>
+=======
+    <SafeAreaView style={{ backgroundColor: "#D7DBDD", flex: 1 }}>
+
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
       <View style={{
         alignItems: "center",
         marginTop: 20,
@@ -257,7 +346,11 @@ const DetailsUpdatingScreen = ({ route }) => {
         <View
           style={{
             width: 370,
+<<<<<<< HEAD
             backgroundColor: "#5B7C99",
+=======
+            backgroundColor: "white",
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
             padding: 30,
             borderRadius: 20,
 
@@ -272,7 +365,11 @@ const DetailsUpdatingScreen = ({ route }) => {
               borderBottomColor: "black",
               paddingBottom: 15,
             }} >
+<<<<<<< HEAD
             <Text><Ionicons name="star" size={24} color="#FFFF00" /></Text>
+=======
+            <Text><Ionicons name="star-outline" size={24} color="black" /></Text>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
             <Text><Ionicons name="star-outline" size={24} color="black" /></Text>
             <Text><Ionicons name="star-outline" size={24} color="black" /></Text>
             <Text><Ionicons name="star-outline" size={24} color="black" /></Text>
@@ -281,18 +378,30 @@ const DetailsUpdatingScreen = ({ route }) => {
           </View>
 
           <View style={{ flexDirection: "row", marginBottom: 10, justifyContent: "space-between" }}>
+<<<<<<< HEAD
             <Text style={{color:"white"}}>Total Time</Text>
             <Text style={{color:"white"}}>Current Page</Text>
           </View>
 
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+=======
+            <Text >Time Elapsed</Text>
+            <Text>Current Page</Text>
+          </View>
+
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>~
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
             <Text style={{ marginLeft: 30 }}>0:0</Text>
             <Text style={{ marginRight: 20 }}>0/150</Text>
           </View>
 
         </View>
       </View>
+<<<<<<< HEAD
       {/* <View style={{ alignItems: "center", marginTop: 30 }} >
+=======
+      <View style={{ alignItems: "center", marginTop: 30 }} >
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
         <SwitchSelector
           options={options}
           initial={0}
@@ -305,6 +414,7 @@ const DetailsUpdatingScreen = ({ route }) => {
         />
 
       </View>
+<<<<<<< HEAD
       {renderOptionContent()} */}
 
       <TouchableOpacity
@@ -320,6 +430,10 @@ const DetailsUpdatingScreen = ({ route }) => {
     </SafeAreaView>
     </View>
 
+=======
+      {renderOptionContent()}
+    </SafeAreaView>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   )
 }
 
@@ -332,8 +446,11 @@ const styles = StyleSheet.create({
   notesContainer: {
     marginTop: 16,
   },
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   card: {
     backgroundColor: '#f5f5f5',
     borderRadius: 8,
@@ -346,6 +463,7 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 16,
   },
+<<<<<<< HEAD
 
   optionsContainer: {
     alignItems: "flex-end"
@@ -353,6 +471,15 @@ const styles = StyleSheet.create({
 
   optionsIconContainer: {
     padding: 4,
+=======
+  optionsContainer: {
+
+    alignItems: "flex-end"
+  },
+  optionsIconContainer: {
+    padding: 4,
+
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
     alignItems: "flex-end"
 
   },
@@ -382,7 +509,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 20,
     marginBottom: 16,
+<<<<<<< HEAD
     fontSize: 18
+=======
+    fontSize:18
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
   },
   saveButton: {
     backgroundColor: "#5D4157",
@@ -390,6 +521,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 14,
     borderRadius: 4,
+<<<<<<< HEAD
     fontSize: 18
   },
   start:{
@@ -406,3 +538,8 @@ const styles = StyleSheet.create({
      backgroundColor:"#0047AB"
   }
 });
+=======
+    fontSize:18
+  },
+});
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e

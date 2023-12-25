@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+<<<<<<< HEAD
 import { LinearGradient } from 'expo-linear-gradient';
+=======
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
 
 
@@ -11,6 +14,7 @@ const ReadingCard = ({ book, onPress }) => {
 
   const navigation = useNavigation();
 
+<<<<<<< HEAD
   const handleCardPress = () => {
     navigation.navigate('Details', { book });
   };
@@ -19,6 +23,12 @@ const ReadingCard = ({ book, onPress }) => {
   return (
 
     <TouchableOpacity style={styles.container} onPress={handleCardPress}>
+=======
+
+  return (
+
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
       <Image source={{ uri: book.ImageUrl }} style={styles.image} />
       <View style={styles.textContainer}>
@@ -28,7 +38,11 @@ const ReadingCard = ({ book, onPress }) => {
       </View>
 
     </TouchableOpacity>
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
 
   );
 };
@@ -39,8 +53,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+<<<<<<< HEAD
     backgroundColor: "#EAB8ED",
     
+=======
+    backgroundColor: "white",
+>>>>>>> e1005bcffff272dc4dc3708e7c07b5328847cd4e
     padding: 20,
     borderRadius: 8,
     marginBottom: 10,
