@@ -1,3 +1,5 @@
+
+
 import SignupScreen from "./pages/SignupScreen";
 import SigninScreen from "./pages/SigninScreen";
 import HighlightScreen from "./pages/HighlightScreen";
@@ -32,13 +34,24 @@ const Navigation = () => {
   const [user, setUser] = useState(null); // State to store the user
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
+    const checkUser = async () => {
+      const storedUid = await AsyncStorage.getItem('userUid');
+      console.log("storedUid..............",storedUid)
+      setUser(storedUid);
+    };
 
-    // Cleanup subscription when component unmounts
-    return () => unsubscribe();
+    checkUser();
   }, []);
+
+
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     setUser(user);
+  //   });
+
+  //   // Cleanup subscription when component unmounts
+  //   return () => unsubscribe();
+  // }, []);
 
   function BottomTabs() {
     return (
@@ -110,6 +123,7 @@ const Navigation = () => {
   }
 
   function HomeStackNavigation() {
+    return (
     <HomeStack.Navigator
       initialRouteName="BottomTabs"
       screenOptions={{ orientation: "portrait" }}
@@ -158,13 +172,14 @@ const Navigation = () => {
         }}
       />
       <HomeStack.Screen name="Photos" component={PhotosScreen} />
-    </HomeStack.Navigator>;
+    </HomeStack.Navigator>
+    )
   }
 
   const AuthStackNavigation = () => {
     return (
       <AuthStack.Navigator
-        initialRouteName={user ? "HomeTabs" : "Signin"}
+        initialRouteName={user ? "BottomTabs" : "Signin"}
         screenOptions={{ orientation: "portrait" }}
       >
         <AuthStack.Screen
@@ -183,21 +198,11 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
         {user ? (
-          <Stack.Screen
-            name="HomeTabs"
-            component={HomeStackNavigation}
-            options={{ headerShown: false }}
-          />
+          <HomeStackNavigation/>
         ) : (
-          <Stack.Screen
-            name="AuthStack"
-            component={AuthStackNavigation}
-            options={{ headerShown: false }}
-          />
+          <AuthStackNavigation/>
         )}
-      </Stack.Navigator>
     </NavigationContainer>
   );
 };

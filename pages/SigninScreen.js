@@ -4,6 +4,8 @@ import { signInWithEmailAndPassword} from 'firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { auth } from '../firebase-config';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const SigninScreen = ({navigation: stackNavigation}) => {
 
@@ -24,14 +26,31 @@ const SigninScreen = ({navigation: stackNavigation}) => {
     return unsubscribe;
   }, []);
   
+
   const SigninUser = () => {
-    
-      signInWithEmailAndPassword(auth,email,password).then((userCredential) => {
-        console.log("user credential",userCredential);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("user credential", userCredential);
         const user = userCredential.user;
-        console.log("user details",user)
+        console.log("user details", user);
+  
+        // Store the UID in AsyncStorage
+        if (user && user.uid) {
+          AsyncStorage.setItem('userUid', user.uid)
+            .then(() => {
+              console.log('UID stored in AsyncStorage:', user.uid);
+              navigation.navigate('BottomTabs');
+            })
+            .catch((error) => {
+              console.error('Error storing UID in AsyncStorage:', error);
+            });
+        }
       })
-    }
+      .catch((error) => {
+        console.error('Signin error:', error);
+      });
+  };
+  
   
 
 
